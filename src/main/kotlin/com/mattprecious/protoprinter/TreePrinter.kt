@@ -1,6 +1,7 @@
 package com.mattprecious.protoprinter
 
-object NodePrinter {
+// TODO: Pull out into its own lib.
+internal object TreePrinter {
   fun render(nodes: List<Node>): String {
     if (nodes.isEmpty()) return ""
     return buildString { appendNodes(nodes) }

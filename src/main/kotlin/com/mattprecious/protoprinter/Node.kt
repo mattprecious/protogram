@@ -1,6 +1,6 @@
 package com.mattprecious.protoprinter
 
-sealed class Node {
+internal sealed class Node {
   abstract val label: String
 
   data class InternalNode(
