@@ -14,7 +14,6 @@ repositories {
 
 dependencies {
   implementation(kotlin("stdlib-jdk8"))
-  implementation("com.jakewharton.picnic", "picnic", "0.2.0")
   implementation("com.squareup.okio", "okio", "2.4.2")
   implementation("com.squareup.wire", "wire-runtime", "3.0.2")
 
