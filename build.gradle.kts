@@ -39,7 +39,8 @@ val fatJar = task("fatJar", type = Jar::class) {
 }
 
 val binaryJar = task("binaryJar") {
-  val binaryFile = File(buildDir, "proto-printer")
+  val binaryDir = File(buildDir, "bin")
+  val binaryFile = File(binaryDir, "proto-printer")
 
   doLast {
     val fatJarFile = fatJar.archiveFile.get().asFile
