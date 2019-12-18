@@ -1,3 +1,5 @@
+package com.mattprecious.protogram
+
 import com.squareup.wire.FieldEncoding
 import com.squareup.wire.ProtoReader
 

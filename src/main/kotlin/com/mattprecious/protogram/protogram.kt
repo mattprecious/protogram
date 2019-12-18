@@ -7,7 +7,6 @@ import com.mattprecious.tinsel.Node.LeafNode
 import com.mattprecious.tinsel.Tinsel
 import com.squareup.wire.FieldEncoding.*
 import com.squareup.wire.ProtoReader
-import generateFieldSequence
 import okio.Buffer
 import okio.ByteString
 import okio.ByteString.Companion.decodeHex
