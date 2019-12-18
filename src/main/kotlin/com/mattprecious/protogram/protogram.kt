@@ -15,7 +15,11 @@ import java.lang.Exception
 fun main(vararg args: String) {
   require(args.size == 1) { "Only one arg supported" }
   val bytes = args.single().decodeHex()
-  println(Tinsel.render(bytes.readProtoNodes()))
+  println(printProto(bytes))
+}
+
+fun printProto(bytes: ByteString): String {
+  return Tinsel.render(bytes.readProtoNodes())
 }
 
 private fun ProtoReader.readNodes(): List<Node> {
