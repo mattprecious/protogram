@@ -17,7 +17,7 @@ dependencies {
   implementation("com.squareup.okio", "okio", "2.4.2")
   implementation("com.squareup.wire", "wire-runtime", "3.0.2")
 
-  testCompile("junit", "junit", "4.12")
+  testCompile("junit", "junit", "4.13-rc-1")
 }
 
 configure<JavaPluginConvention> {
