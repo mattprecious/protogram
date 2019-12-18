@@ -5,7 +5,6 @@ plugins {
 
 dependencies {
   api(kotlin("stdlib-jdk8"))
-
-  testImplementation(project(":test", configuration = "default"))
+  implementation(project(":tinsel", "default"))
   testImplementation("junit", "junit", "4.13-rc-1")
 }

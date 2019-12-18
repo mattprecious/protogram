@@ -54,6 +54,6 @@ private fun String.escape(): String {
   return replace("\n", "\\n")
 }
 
-private fun ByteString.readProtoNodes(): List<Node> {
+internal fun ByteString.readProtoNodes(): List<Node> {
   return ProtoReader(Buffer().write(this)).readNodes()
 }

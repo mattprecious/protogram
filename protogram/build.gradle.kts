@@ -10,6 +10,7 @@ dependencies {
   implementation("com.squareup.okio", "okio", "2.4.2")
   implementation("com.squareup.wire", "wire-runtime", "3.0.2")
 
+  testImplementation(project(":test", configuration = "default"))
   testImplementation("junit", "junit", "4.13-rc-1")
 }
 
