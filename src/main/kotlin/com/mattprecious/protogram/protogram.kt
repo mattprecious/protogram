@@ -1,7 +1,10 @@
-package com.mattprecious.protoprinter
+@file:JvmName("Protogram")
+package com.mattprecious.protogram
 
-import com.mattprecious.protoprinter.Node.InternalNode
-import com.mattprecious.protoprinter.Node.LeafNode
+import com.mattprecious.tinsel.Node
+import com.mattprecious.tinsel.Node.InternalNode
+import com.mattprecious.tinsel.Node.LeafNode
+import com.mattprecious.tinsel.Tinsel
 import com.squareup.wire.FieldEncoding.*
 import com.squareup.wire.ProtoReader
 import generateFieldSequence
@@ -13,7 +16,7 @@ import java.lang.Exception
 fun main(vararg args: String) {
   require(args.size == 1) { "Only one arg supported" }
   val bytes = args.single().decodeHex()
-  println(TreePrinter.render(bytes.readProtoNodes()))
+  println(Tinsel.render(bytes.readProtoNodes()))
 }
 
 private fun ProtoReader.readNodes(): List<Node> {

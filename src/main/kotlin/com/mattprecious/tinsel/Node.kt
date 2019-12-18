@@ -1,4 +1,4 @@
-package com.mattprecious.protoprinter
+package com.mattprecious.tinsel
 
 internal sealed class Node {
   abstract val label: String

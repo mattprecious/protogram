@@ -34,13 +34,13 @@ val fatJar = task("fatJar", type = Jar::class) {
   archiveClassifier.set("fat")
 
   manifest {
-    attributes["Main-Class"] = "com.mattprecious.protoprinter.ProtoPrinterKt"
+    attributes["Main-Class"] = "com.mattprecious.protogram.Protogram"
   }
 }
 
 val binaryJar = task("binaryJar") {
   val binaryDir = File(buildDir, "bin")
-  val binaryFile = File(binaryDir, "proto-printer")
+  val binaryFile = File(binaryDir, "protogram")
 
   doLast {
     val fatJarFile = fatJar.archiveFile.get().asFile
