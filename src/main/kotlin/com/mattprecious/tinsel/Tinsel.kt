@@ -18,6 +18,7 @@ internal object Tinsel {
       append(indent)
       append(
         when {
+          isFirst && isLast && !indented -> "──"
           isFirst && !indented -> "┌─"
           isLast -> "╰-"
           else -> "├─"
