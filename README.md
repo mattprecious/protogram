@@ -18,7 +18,11 @@ protogram 0a0344616e120911000000000000e03f70107a021001
 
 ## Download
 
-Coming soon.
+Available in [Releases](https://github.com/mattprecious/protogram/releases) or via Homebrew:
+
+```bash
+brew install mattprecious/repo/protogram
+```
 
 ## License
 
