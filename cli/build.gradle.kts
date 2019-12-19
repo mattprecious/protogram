@@ -1,9 +1,16 @@
+import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
+
 plugins {
   kotlin("jvm")
 }
 
 dependencies {
   implementation(project(":protogram"))
+  implementation("com.github.ajalt", "clikt", "2.3.0")
+}
+
+tasks.withType<KotlinCompile> {
+  kotlinOptions.jvmTarget = "1.8"
 }
 
 val fatJar = task("fatJar", type = Jar::class) {
