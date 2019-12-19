@@ -7,6 +7,8 @@ plugins {
 dependencies {
   implementation(project(":protogram"))
   implementation("com.github.ajalt", "clikt", "2.3.0")
+
+  testImplementation("junit", "junit", "4.13-rc-1")
 }
 
 tasks.withType<KotlinCompile> {
