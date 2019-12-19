@@ -1,19 +1,19 @@
-import org.jetbrains.kotlin.gradle.plugin.KotlinCompilationToRunnableFiles
-
 plugins {
   kotlin("multiplatform")
 }
 
 kotlin {
   jvm()
-  js()
+  js {
+    browser
+  }
 
   sourceSets {
     commonMain {
       dependencies {
         implementation(kotlin("stdlib-common"))
         implementation(project(":tinsel"))
-        implementation("com.squareup.okio:okio-multiplatform:2.4.2")
+        api("com.squareup.okio:okio-multiplatform:2.4.2")
         implementation("com.squareup.wire:wire-runtime-multiplatform:3.0.2")
       }
     }
@@ -46,41 +46,4 @@ kotlin {
       }
     }
   }
-}
-
-val fatJar = task("fatJar", type = Jar::class) {
-  val mainCompilation = kotlin.targets["jvm"].compilations["main"] as KotlinCompilationToRunnableFiles
-  from(mainCompilation.output)
-  afterEvaluate {
-    from(mainCompilation.runtimeDependencyFiles.map { if (it.isDirectory) it else zipTree(it) })
-  }
-
-  archiveClassifier.set("fat")
-
-  manifest {
-    attributes["Main-Class"] = "com.mattprecious.protogram.Protogram"
-  }
-}
-
-val binaryJar = task("binaryJar") {
-  val binaryDir = File(buildDir, "bin")
-  val binaryFile = File(binaryDir, "protogram")
-
-  doLast {
-    val fatJarFile = fatJar.archiveFile.get().asFile
-
-    binaryFile.parentFile.mkdirs()
-    binaryFile.appendText("#!/bin/sh\n\nexec java -jar \$0 \"\$@\"\n\n")
-    binaryFile.appendBytes(fatJarFile.readBytes())
-
-    binaryFile.setExecutable(true)
-  }
-}
-
-tasks {
-  "assemble" {
-    dependsOn(binaryJar)
-  }
-
-  binaryJar.dependsOn(fatJar)
 }

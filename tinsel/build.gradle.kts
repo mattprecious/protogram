@@ -4,7 +4,9 @@ plugins {
 
 kotlin {
   jvm()
-  js()
+  js {
+    browser
+  }
 
   sourceSets {
     commonMain {
@@ -16,7 +18,7 @@ kotlin {
       dependencies {
         implementation(kotlin("test-common"))
         implementation(kotlin("test-annotations-common"))
-        implementation(project(":test", "default"))
+        implementation(project(":test"))
       }
     }
     jvm().compilations["main"].defaultSourceSet {

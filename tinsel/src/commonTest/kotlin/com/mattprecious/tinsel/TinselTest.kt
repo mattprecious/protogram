@@ -1,6 +1,6 @@
 package com.mattprecious.tinsel
 
-import com.mattprecious.tinsel.Node.InternalNode
+import com.mattprecious.protogram.test.buildRecursiveTree
 import com.mattprecious.tinsel.Node.LeafNode
 import kotlin.test.Test
 import kotlin.test.assertEquals
@@ -83,31 +83,5 @@ class TinselTest {
       |╰- 1: 456
       |""".trimMargin()
     assertEquals(expected, actual)
-  }
-
-  @Test fun `test the recursive tree builder`() {
-    var actual = buildRecursiveTree(label = "2", leafValue = "v", depth = 1)
-    var expected: Node = LeafNode("2", "v")
-    assertEquals(expected, actual)
-
-    actual = buildRecursiveTree("2", "v", 2)
-    expected = InternalNode("2", listOf(LeafNode("2", "v")))
-    assertEquals(expected, actual)
-
-    actual = buildRecursiveTree(label = "2", leafValue = "v", depth = 5)
-    expected = InternalNode("2", listOf(InternalNode("2", listOf(InternalNode("2", listOf(InternalNode("2", listOf(LeafNode("2", "v")))))))))
-    assertEquals(expected, actual)
-  }
-}
-
-internal fun buildRecursiveTree(
-  label: String,
-  leafValue: String,
-  depth: Int
-): Node {
-  return if (depth == 1) {
-    LeafNode(label, leafValue)
-  } else {
-    InternalNode(label, listOf(buildRecursiveTree(label, leafValue, depth - 1)))
   }
 }
