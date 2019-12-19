@@ -23,8 +23,10 @@ distributions {
     }
   }
 }
-tasks.named("distZip").configure {
-  dependsOn(tasks.getByName("browserWebpack"))
+listOf("distZip", "installDist").forEach {
+  tasks.named(it).configure {
+    dependsOn(tasks.getByName("browserWebpack"))
+  }
 }
 tasks.named("distTar").configure {
   enabled = false
