@@ -1,11 +1,43 @@
 plugins {
-  `java-library`
-  kotlin("jvm")
+  kotlin("multiplatform")
 }
 
-dependencies {
-  api(kotlin("stdlib-jdk8"))
+kotlin {
+  jvm()
+  js()
 
-  testImplementation(project(":test", configuration = "default"))
-  testImplementation("junit", "junit", "4.13-rc-1")
+  sourceSets {
+    commonMain {
+      dependencies {
+        implementation(kotlin("stdlib-common"))
+      }
+    }
+    commonTest {
+      dependencies {
+        implementation(kotlin("test-common"))
+        implementation(kotlin("test-annotations-common"))
+        implementation(project(":test", "default"))
+      }
+    }
+    jvm().compilations["main"].defaultSourceSet {
+      dependencies {
+        implementation(kotlin("stdlib-jdk8"))
+      }
+    }
+    jvm().compilations["test"].defaultSourceSet {
+      dependencies {
+        implementation(kotlin("test-junit"))
+      }
+    }
+    js().compilations["main"].defaultSourceSet {
+      dependencies {
+        implementation(kotlin("stdlib-js"))
+      }
+    }
+    js().compilations["test"].defaultSourceSet {
+      dependencies {
+        implementation(kotlin("test-js"))
+      }
+    }
+  }
 }

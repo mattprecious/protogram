@@ -1,29 +1,59 @@
-import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
+import org.jetbrains.kotlin.gradle.plugin.KotlinCompilationToRunnableFiles
 
 plugins {
-  kotlin("jvm")
+  kotlin("multiplatform")
 }
 
-dependencies {
-  api(kotlin("stdlib-jdk8"))
-  implementation(project(":tinsel", "default"))
-  implementation("com.squareup.okio", "okio", "2.4.2")
-  implementation("com.squareup.wire", "wire-runtime", "3.0.2")
+kotlin {
+  jvm()
+  js()
 
-  testImplementation(project(":test", configuration = "default"))
-  testImplementation("junit", "junit", "4.13-rc-1")
-}
+  sourceSets {
+    commonMain {
+      dependencies {
+        implementation(kotlin("stdlib-common"))
+        implementation(project(":tinsel"))
+        implementation("com.squareup.okio:okio-multiplatform:2.4.2")
+        implementation("com.squareup.wire:wire-runtime-multiplatform:3.0.2")
+      }
+    }
+    commonTest {
+      dependencies {
+        implementation(kotlin("test-common"))
+        implementation(kotlin("test-annotations-common"))
+        implementation(project(":test"))
+      }
+    }
 
-configure<JavaPluginConvention> {
-  sourceCompatibility = JavaVersion.VERSION_1_8
-}
-tasks.withType<KotlinCompile> {
-  kotlinOptions.jvmTarget = "1.8"
+    jvm().compilations["main"].defaultSourceSet {
+      dependencies {
+        implementation(kotlin("stdlib-jdk8"))
+      }
+    }
+    jvm().compilations["test"].defaultSourceSet {
+      dependencies {
+        implementation(kotlin("test-junit"))
+      }
+    }
+    js().compilations["main"].defaultSourceSet {
+      dependencies {
+        implementation(kotlin("stdlib-js"))
+      }
+    }
+    js().compilations["test"].defaultSourceSet {
+      dependencies {
+        implementation(kotlin("test-js"))
+      }
+    }
+  }
 }
 
 val fatJar = task("fatJar", type = Jar::class) {
-  from(configurations.runtimeClasspath.get().map { if (it.isDirectory) it else zipTree(it) })
-  with(tasks.jar.get() as CopySpec)
+  val mainCompilation = kotlin.targets["jvm"].compilations["main"] as KotlinCompilationToRunnableFiles
+  from(mainCompilation.output)
+  afterEvaluate {
+    from(mainCompilation.runtimeDependencyFiles.map { if (it.isDirectory) it else zipTree(it) })
+  }
 
   archiveClassifier.set("fat")
 
