@@ -22,7 +22,12 @@ private fun ProtoReader.readNodes(): List<Node> {
 
       val nodeValue = when (encoding) {
         VARINT -> readVarint64().toString()
-        FIXED64 -> readFixed64().toString()
+        FIXED64 -> {
+          val long = readFixed64()
+          val double = Double.fromBits(long)
+
+          "$long ($double)"
+        }
         FIXED32 -> readFixed32().toString()
         LENGTH_DELIMITED -> {
           val bytes = readBytes()
