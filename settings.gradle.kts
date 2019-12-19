@@ -1,3 +1,3 @@
 rootProject.name = "protogram-root"
 
-include("protogram", "tinsel")
+include("protogram", "tinsel", "test")
