@@ -1,6 +1,6 @@
 package com.mattprecious.tinsel
 
-internal sealed class Node {
+sealed class Node {
   abstract val label: String
 
   data class InternalNode(
