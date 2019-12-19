@@ -3,8 +3,8 @@ package com.mattprecious.protogram.test
 import com.mattprecious.tinsel.Node
 import com.mattprecious.tinsel.Node.InternalNode
 import com.mattprecious.tinsel.Node.LeafNode
-import org.junit.Assert.assertEquals
-import org.junit.Test
+import kotlin.test.Test
+import kotlin.test.assertEquals
 
 class RecursionTest {
   @Test fun recursiveTreeBuilder() {

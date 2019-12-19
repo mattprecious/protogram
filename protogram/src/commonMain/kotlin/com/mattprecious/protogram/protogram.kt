@@ -9,14 +9,7 @@ import com.squareup.wire.FieldEncoding.*
 import com.squareup.wire.ProtoReader
 import okio.Buffer
 import okio.ByteString
-import okio.ByteString.Companion.decodeHex
 import kotlin.jvm.JvmName
-
-fun main(vararg args: String) {
-  require(args.size == 1) { "Only one arg supported" }
-  val bytes = args.single().decodeHex()
-  println(printProto(bytes))
-}
 
 fun printProto(bytes: ByteString): String {
   return Tinsel.render(bytes.readProtoNodes())
