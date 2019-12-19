@@ -2,6 +2,7 @@ package com.mattprecious.protogram
 
 import com.mattprecious.protogram.test.buildRecursiveTree
 import com.mattprecious.tinsel.Node
+import com.mattprecious.tinsel.Node.InternalNode
 import com.mattprecious.tinsel.Node.LeafNode
 import okio.ByteString.Companion.decodeHex
 import kotlin.test.Test
@@ -11,6 +12,21 @@ class ProtogramTest {
   @Test fun empty() {
     val actual = "".decodeHex().readProtoNodes()
     val expected = emptyList<Node>()
+    assertEquals(expected, actual)
+  }
+
+  @Test fun simple() {
+    val actual = "0a0344616e120911000000000000e03f70107a021001".decodeHex().readProtoNodes()
+    val expected = listOf(
+        LeafNode("1", "\"Dan\""),
+        InternalNode("2", listOf(
+            LeafNode("2", "4602678819172646912 (0.5)")
+        )),
+        LeafNode("14", "16"),
+        InternalNode("15", listOf(
+            LeafNode("2", "1")
+        ))
+    )
     assertEquals(expected, actual)
   }
 
