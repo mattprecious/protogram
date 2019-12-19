@@ -14,7 +14,12 @@ fun main() {
   convert.removeAttribute("disabled")
   convert.addEventListener("click", callback = {
     val hex = input.value.trim()
-    val tree = printProto(hex.decodeHex())
+    val tree = try {
+      printProto(hex.decodeHex())
+    } catch (e: Exception) {
+      console.error(e)
+      "Unable to decode hex\n\nError: ${e::class.simpleName} ${e.message ?: ""}"
+    }
     output.value = tree
   })
 }
