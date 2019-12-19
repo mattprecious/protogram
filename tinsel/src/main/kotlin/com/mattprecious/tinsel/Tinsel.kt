@@ -1,7 +1,6 @@
 package com.mattprecious.tinsel
 
-// TODO: Pull out into its own lib.
-internal object Tinsel {
+object Tinsel {
   fun render(nodes: List<Node>): String {
     if (nodes.isEmpty()) return ""
     return buildString { appendNodes(nodes) }
