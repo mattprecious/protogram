@@ -11,6 +11,7 @@ kotlin {
   sourceSets["main"].dependencies {
     implementation(project(":protogram"))
     implementation(kotlin("stdlib-js"))
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core-js:1.3.3")
   }
 }
 
