@@ -1,19 +1,21 @@
 @file:JvmName("Protogram")
 package com.mattprecious.protogram
 
-import com.mattprecious.tinsel.Node
 import com.mattprecious.tinsel.Node.Branch
 import com.mattprecious.tinsel.Node.Leaf
-import com.mattprecious.tinsel.Tinsel
 import com.mattprecious.tinsel.Tree
-import com.squareup.wire.FieldEncoding.*
+import com.mattprecious.tinsel.render
+import com.squareup.wire.FieldEncoding.FIXED32
+import com.squareup.wire.FieldEncoding.FIXED64
+import com.squareup.wire.FieldEncoding.LENGTH_DELIMITED
+import com.squareup.wire.FieldEncoding.VARINT
 import com.squareup.wire.ProtoReader
 import okio.Buffer
 import okio.ByteString
 import kotlin.jvm.JvmName
 
 fun printProto(bytes: ByteString): String {
-  return Tinsel.render(bytes.readProtoTree())
+  return bytes.readProtoTree().render()
 }
 
 internal fun ByteString.readProtoTree(): Tree {

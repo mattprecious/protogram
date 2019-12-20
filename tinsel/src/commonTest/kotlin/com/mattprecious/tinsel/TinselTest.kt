@@ -7,14 +7,14 @@ import kotlin.test.assertEquals
 
 class TinselTest {
   @Test fun empty() {
-    val actual = Tinsel.render(Tree())
+    val actual = Tree().render()
     val expected = ""
     assertEquals(expected, actual)
   }
 
   @Test fun crazyNesting() {
     val recursiveTree = buildRecursiveTree(label = "2", leafValue = "(empty)", depth = 64)
-    val actual = Tinsel.render(Tree(listOf(recursiveTree, Leaf("1", "456"))))
+    val actual = Tree(listOf(recursiveTree, Leaf("1", "456"))).render()
     val expected = """
       |┌─ 2 ┐
       |│    ╰- 2 ┐
