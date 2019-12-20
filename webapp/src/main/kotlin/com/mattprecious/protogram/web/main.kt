@@ -22,12 +22,29 @@ import org.w3c.files.Blob
 import org.w3c.files.File
 import org.w3c.files.FileList
 import kotlin.browser.document
+import kotlin.browser.window
 import kotlin.js.Promise
 
 suspend fun main() = coroutineScope<Unit> {
   val input = document.getElementById("input") as HTMLTextAreaElement
   val file = document.getElementById("file") as HTMLInputElement
   val output = document.getElementById("output") as HTMLTextAreaElement
+
+  fun setInput(value: String) {
+    input.value = value
+    // Setting the value programmatically does not fire the 'input' event.
+    input.dispatchEvent(Event("input"))
+  }
+
+  fun renderHex(value: String) {
+    val tree = try {
+      printProto(value.decodeHex())
+    } catch (e: Exception) {
+      console.error(e)
+      "Unable to decode hex\n\nError: ${e::class.simpleName} ${e.message ?: ""}"
+    }
+    output.value = tree
+  }
 
   launch {
     file.events("change")
@@ -42,10 +59,7 @@ suspend fun main() = coroutineScope<Unit> {
         .collect {
           // Clear input file. We use dynamic because the Kotlin type is not nullable.
           file.asDynamic().value = null
-
-          input.value = it
-          // Setting the value programmatically does not fire the 'input' event.
-          input.dispatchEvent(Event("input"))
+          setInput(it)
         }
   }
 
@@ -53,15 +67,15 @@ suspend fun main() = coroutineScope<Unit> {
     input.events("input")
         .map { input.value.trim() }
         .collect {
-          val tree = try {
-            printProto(it.decodeHex())
-          } catch (e: Exception) {
-            console.error(e)
-            "Unable to decode hex\n\nError: ${e::class.simpleName} ${e.message ?: ""}"
-          }
-          output.value = tree
+          window.history.replaceState(it, "", "?$it")
+          renderHex(it)
         }
   }
+
+  val defaultHex = window.location.search.trimStart('?')
+  // We directly set the input and render to avoid replacing the initial history state.
+  input.value = defaultHex
+  renderHex(defaultHex)
 }
 
 private fun EventTarget.events(event: String) = callbackFlow {
