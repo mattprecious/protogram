@@ -10,6 +10,7 @@ body {
     margin-left: auto;
     margin-right: auto;
     width: 1024px;
+    font-family: Georgia, serif;
 }
 @media (max-width: 1023px) {
   body {
@@ -18,8 +19,14 @@ body {
     margin-right: 15px;
   }
 }
+a, a:link, a:active, a:visited {
+    text-decoration: underline;
+    color: rgba(224, 235, 247, 0.8);
+}
+a:hover {
+  color: rgb(40, 217, 242);
+}
 h1 {
-    font-family: Georgia, serif;
     font-weight: 200;
 }
 button {
