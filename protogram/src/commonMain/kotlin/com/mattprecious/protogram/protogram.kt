@@ -2,9 +2,10 @@
 package com.mattprecious.protogram
 
 import com.mattprecious.tinsel.Node
-import com.mattprecious.tinsel.Node.InternalNode
-import com.mattprecious.tinsel.Node.LeafNode
+import com.mattprecious.tinsel.Node.Branch
+import com.mattprecious.tinsel.Node.Leaf
 import com.mattprecious.tinsel.Tinsel
+import com.mattprecious.tinsel.Tree
 import com.squareup.wire.FieldEncoding.*
 import com.squareup.wire.ProtoReader
 import okio.Buffer
@@ -12,19 +13,23 @@ import okio.ByteString
 import kotlin.jvm.JvmName
 
 fun printProto(bytes: ByteString): String {
-  return Tinsel.render(bytes.readProtoNodes())
+  return Tinsel.render(bytes.readProtoTree())
 }
 
-private fun ProtoReader.readNodes(): List<Node> {
-  return generateFieldSequence()
-    .map { (tag, encoding) ->
-      val tagString = tag.toString()
+internal fun ByteString.readProtoTree(): Tree {
+  return ProtoReader(Buffer().write(this)).readTree()
+}
 
-      val nodeValue = when (encoding) {
-        VARINT -> readVarint64().toString()
-        FIXED64 -> {
-          val long = readFixed64()
-          val double = Double.fromBits(long)
+private fun ProtoReader.readTree(): Tree {
+  return generateFieldSequence()
+      .map { (tag, encoding) ->
+        val tagString = tag.toString()
+
+        val nodeValue = when (encoding) {
+          VARINT -> readVarint64().toString()
+          FIXED64 -> {
+            val long = readFixed64()
+            val double = Double.fromBits(long)
 
           "$long ($double)"
         }
@@ -36,22 +41,20 @@ private fun ProtoReader.readNodes(): List<Node> {
             "(empty)"
           } else {
             try {
-              return@map InternalNode(tagString, bytes.readProtoNodes())
+              return@map Branch(tagString, bytes.readProtoTree().nodes)
             } catch (_: Exception) {
               "\"${bytes.utf8().escape()}\""
             }
           }
         }
-      }
+        }
 
-      return@map LeafNode(tagString, nodeValue)
-    }.toList()
+        return@map Leaf(tagString, nodeValue)
+      }
+      .toList()
+      .let { Tree(it) }
 }
 
 private fun String.escape(): String {
   return replace("\n", "\\n")
-}
-
-internal fun ByteString.readProtoNodes(): List<Node> {
-  return ProtoReader(Buffer().write(this)).readNodes()
 }

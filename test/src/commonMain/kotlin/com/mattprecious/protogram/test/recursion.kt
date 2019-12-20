@@ -1,8 +1,8 @@
 package com.mattprecious.protogram.test
 
 import com.mattprecious.tinsel.Node
-import com.mattprecious.tinsel.Node.InternalNode
-import com.mattprecious.tinsel.Node.LeafNode
+import com.mattprecious.tinsel.Node.Branch
+import com.mattprecious.tinsel.Node.Leaf
 
 fun buildRecursiveTree(
   label: String,
@@ -10,8 +10,8 @@ fun buildRecursiveTree(
   depth: Int
 ): Node {
   return if (depth == 1) {
-    LeafNode(label, leafValue)
+    Leaf(label, leafValue)
   } else {
-    InternalNode(label, listOf(buildRecursiveTree(label, leafValue, depth - 1)))
+    Branch(label, listOf(buildRecursiveTree(label, leafValue, depth - 1)))
   }
 }
