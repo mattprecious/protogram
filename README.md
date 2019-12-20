@@ -2,12 +2,12 @@
 
 Protogram is a tool to quickly deserialize and print an encoded proto without the need for any `.proto` files.
 
-## Usage
+## Command-Line Usage
 
 Pass a hex-encoded proto message to `protogram`:
 
 ```
-protogram 0a0344616e120911000000000000e03f70107a021001
+$ protogram 0a0344616e120911000000000000e03f70107a021001
 ┌─  1: "Dan"
 ├─  2 ┐
 │     ╰- 2: 4602678819172646912 (0.5)
@@ -15,6 +15,24 @@ protogram 0a0344616e120911000000000000e03f70107a021001
 ╰- 15 ┐
       ╰- 2: 1
 ```
+
+You can also pipe a binary file into `protogram`:
+
+```
+$ cat dan.pb | protogram
+┌─  1: "Dan"
+├─  2 ┐
+│     ╰- 2: 4602678819172646912 (0.5)
+├─ 14: 16
+╰- 15 ┐
+      ╰- 2: 1
+```
+
+## Browser Usage
+
+The same code that powers the command-line tool is compiled to JS and lives at
+https://mattprecious.github.io/protogram/. Enter hex-encoded protos or open binary proto
+files from your computer.
 
 ## Download
 
