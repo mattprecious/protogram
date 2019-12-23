@@ -41,4 +41,13 @@ class ProtogramTest {
 
     assertEquals(expected, actual)
   }
+
+  @Test fun packedRepeatedInt32() {
+    val actual = "d20504d904bd05".decodeHex().readProtoTree()
+    val expected = tree {
+      "90" to "601"
+      "90" to "701"
+    }
+    assertEquals(expected, actual)
+  }
 }
