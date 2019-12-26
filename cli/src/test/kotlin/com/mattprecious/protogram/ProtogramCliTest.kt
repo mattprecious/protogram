@@ -1,12 +1,12 @@
 package com.mattprecious.protogram
 
 import com.github.ajalt.clikt.core.PrintHelpMessage
+import java.io.PrintStream
 import okio.Buffer
 import okio.ByteString.Companion.decodeHex
 import org.junit.Assert.assertEquals
 import org.junit.Assert.fail
 import org.junit.Test
-import java.io.PrintStream
 
 class ProtogramCliTest {
   private val stdin = Buffer()

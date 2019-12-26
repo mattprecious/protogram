@@ -2,9 +2,9 @@ package com.mattprecious.protogram
 
 import com.mattprecious.protogram.test.buildRecursiveTree
 import com.mattprecious.tinsel.tree
-import okio.ByteString.Companion.decodeHex
 import kotlin.test.Test
 import kotlin.test.assertEquals
+import okio.ByteString.Companion.decodeHex
 
 class ProtogramTest {
   @Test fun empty() {
