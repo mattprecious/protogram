@@ -1,5 +1,6 @@
 plugins {
   kotlin("js")
+  id("org.jlleitschuh.gradle.ktlint")
   distribution
 }
 

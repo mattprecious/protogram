@@ -10,9 +10,9 @@ import com.squareup.wire.FieldEncoding.FIXED64
 import com.squareup.wire.FieldEncoding.LENGTH_DELIMITED
 import com.squareup.wire.FieldEncoding.VARINT
 import com.squareup.wire.ProtoReader
+import kotlin.jvm.JvmName
 import okio.Buffer
 import okio.ByteString
-import kotlin.jvm.JvmName
 
 fun printProto(bytes: ByteString): String {
   return bytes.readProtoTree().render()

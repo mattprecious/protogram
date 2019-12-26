@@ -1,5 +1,6 @@
 plugins {
   kotlin("multiplatform")
+  id("org.jlleitschuh.gradle.ktlint")
 }
 
 kotlin {

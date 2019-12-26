@@ -1,6 +1,9 @@
 package com.mattprecious.protogram.web
 
 import com.mattprecious.protogram.printProto
+import kotlin.browser.document
+import kotlin.browser.window
+import kotlin.js.Promise
 import kotlinx.coroutines.await
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.coroutineScope
@@ -21,9 +24,6 @@ import org.w3c.dom.events.EventTarget
 import org.w3c.files.Blob
 import org.w3c.files.File
 import org.w3c.files.FileList
-import kotlin.browser.document
-import kotlin.browser.window
-import kotlin.js.Promise
 
 suspend fun main() = coroutineScope<Unit> {
   val input = document.getElementById("input") as HTMLTextAreaElement
