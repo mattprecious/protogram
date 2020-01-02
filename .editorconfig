@@ -1,5 +1,5 @@
 [*.{kt,kts}]
 indent_size=2
-continuation_indent_size=4
+ij_continuation_indent_size=4
 insert_final_newline=true
 ij_kotlin_name_count_to_use_star_import = 9999
