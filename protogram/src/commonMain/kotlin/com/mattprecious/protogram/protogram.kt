@@ -94,7 +94,7 @@ private fun ByteString.isProbablyUtf8(): Boolean {
   val byteBuffer = Buffer().write(this)
   while (!byteBuffer.exhausted()) {
     val codePoint = byteBuffer.readUtf8CodePoint()
-    if (codePoint.isISOControl() && !codePoint.isWhitespace()) {
+    if (codePoint.isLikelyBinary()) {
       return false
     }
   }
@@ -102,37 +102,13 @@ private fun ByteString.isProbablyUtf8(): Boolean {
   return true
 }
 
-private fun Int.isISOControl(): Boolean {
-  return (this in 0x00..0x1F) or (this in 0x7F..0x9F)
+private fun Int.isLikelyBinary(): Boolean {
+  return when (this) {
+    0xFFFD -> true // Replacement code point.
+    ' '.toInt(), '\t'.toInt(), '\r'.toInt(), '\n'.toInt() -> false
+    else -> (this in 0x00..0x1F) or (this in 0x7F..0x9F)
+  }
 }
-
-private const val whitespaceChars = "" +
-    "\u0020" +
-    "\u1680" +
-    "\u1680" +
-    "\u2000" +
-    "\u2001" +
-    "\u2002" +
-    "\u2003" +
-    "\u2004" +
-    "\u2005" +
-    "\u2006" +
-    "\u2008" +
-    "\u2009" +
-    "\u200A" +
-    "\u3000" +
-    "\u2028" +
-    "\u2029" +
-    "\t" +
-    "\n" +
-    "\u000B" +
-    "\r" +
-    "\u001C" +
-    "\u001D" +
-    "\u001E" +
-    "\u001F"
-
-private fun Int.isWhitespace() = this.toChar() in whitespaceChars
 
 private fun String.escape(): String {
   return replace("\n", "\\n")
