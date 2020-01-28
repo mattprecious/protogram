@@ -38,7 +38,9 @@ suspend fun main() = coroutineScope<Unit> {
 
   fun renderHex(value: String) {
     val tree = try {
-      printProto(value.decodeHex())
+      val trimmedValue = value.trim()
+          .replace("\n", "")
+      printProto(trimmedValue.decodeHex())
     } catch (e: Exception) {
       console.error(e)
       "Unable to decode hex\n\nError: ${e::class.simpleName} ${e.message ?: ""}"
