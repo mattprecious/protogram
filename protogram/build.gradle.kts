@@ -12,10 +12,10 @@ kotlin {
   sourceSets {
     commonMain {
       dependencies {
-        implementation(kotlin("stdlib-common"))
+        api(kotlin("stdlib-common"))
         implementation(project(":tinsel"))
         api("com.squareup.okio:okio-multiplatform:2.4.2")
-        implementation("com.squareup.wire:wire-runtime-multiplatform:3.0.2")
+        api("com.squareup.wire:wire-schema-multiplatform:3.1.0")
       }
     }
     commonTest {
@@ -28,7 +28,7 @@ kotlin {
 
     jvm().compilations["main"].defaultSourceSet {
       dependencies {
-        implementation(kotlin("stdlib-jdk8"))
+        api(kotlin("stdlib-jdk8"))
       }
     }
     jvm().compilations["test"].defaultSourceSet {
@@ -38,7 +38,7 @@ kotlin {
     }
     js().compilations["main"].defaultSourceSet {
       dependencies {
-        implementation(kotlin("stdlib-js"))
+        api(kotlin("stdlib-js"))
       }
     }
     js().compilations["test"].defaultSourceSet {

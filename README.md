@@ -28,6 +28,18 @@ $ cat dan.pb | protogram
       ╰- 2: 1
 ```
 
+If you have the proto files available, `protogram` can parse the names more accurately:
+
+```
+protogram --source protos/ --type example.User 0a0344616e120911000000000000e03f70107a021001
+┌─  name: "Dan"
+├─ prefs: ┐
+│         ╰- ratio: 4602678819172646912 (0.5)
+├─   age: 16
+╰- count: ┐
+          ╰- download: 1
+```
+
 ## Browser Usage
 
 The same code that powers the command-line tool is compiled to JS and lives at

@@ -10,23 +10,46 @@ import com.squareup.wire.FieldEncoding.FIXED64
 import com.squareup.wire.FieldEncoding.LENGTH_DELIMITED
 import com.squareup.wire.FieldEncoding.VARINT
 import com.squareup.wire.ProtoReader
+import com.squareup.wire.schema.EnumType
+import com.squareup.wire.schema.MessageType
+import com.squareup.wire.schema.ProtoType
+import com.squareup.wire.schema.Schema
 import kotlin.jvm.JvmName
 import okio.Buffer
 import okio.ByteString
 
-fun printProto(bytes: ByteString): String {
-  return bytes.readProtoTree().render()
+fun printProto(bytes: ByteString, schema: Schema? = null, type: ProtoType? = null): String {
+  return bytes.readProtoTree(schema, type).render()
 }
 
-internal fun ByteString.readProtoTree(): Tree {
-  return ProtoReader(Buffer().write(this)).readTree()
+internal fun ByteString.readProtoTree(schema: Schema? = null, type: ProtoType? = null): Tree {
+  return ProtoReader(Buffer().write(this)).readTree(schema, type)
 }
 
-private fun ProtoReader.readTree(): Tree {
+private fun ProtoReader.readTree(schema: Schema?, type: ProtoType?): Tree {
   return generateFieldSequence()
       .flatMap { (tag, encoding) ->
-        val tagString = tag.toString()
+        var fieldType: ProtoType? = null
+        var fieldName = tag.toString()
+        if (schema != null && type != null) {
+          when (val schemaType = schema.getType(type)) {
+            is MessageType -> {
+              val field = schemaType.field(tag)
+              if (field != null) {
+                fieldType = field.type
+                fieldName = field.name
+              }
+            }
+            is EnumType -> {
+              val constant = schemaType.constant(tag)
+              if (constant != null) {
+                fieldName = constant.name
+              }
+            }
+          }
+        }
 
+        // TODO use fieldType (if present) to aid in parsing and display of value.
         val nodeValues = when (encoding) {
           VARINT -> listOf(readVarint64().toString())
           FIXED64 -> {
@@ -43,7 +66,8 @@ private fun ProtoReader.readTree(): Tree {
               listOf("(empty)")
             } else {
               try {
-                return@flatMap listOf(Branch(tagString, bytes.readProtoTree().nodes)).asSequence()
+                val nestedTree = bytes.readProtoTree(schema, fieldType)
+                return@flatMap listOf(Branch(fieldName, nestedTree.nodes)).asSequence()
               } catch (_: Exception) {
                 if (bytes.isProbablyUtf8()) {
                   listOf("\"${bytes.utf8().escape()}\"")
@@ -55,7 +79,7 @@ private fun ProtoReader.readTree(): Tree {
           }
         }
 
-        return@flatMap nodeValues.map { Leaf(tagString, it) }.asSequence()
+        return@flatMap nodeValues.map { Leaf(fieldName, it) }.asSequence()
       }
       .toList()
       .let { Tree(it) }

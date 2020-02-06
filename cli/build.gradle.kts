@@ -6,10 +6,12 @@ plugins {
 }
 
 dependencies {
+  implementation(kotlin("stdlib-jdk8"))
   implementation(project(":protogram"))
   implementation("com.github.ajalt", "clikt", "2.3.0")
 
-  testImplementation("junit", "junit", "4.13-rc-1")
+  testImplementation("junit", "junit", "4.13")
+  testImplementation("com.google.jimfs", "jimfs", "1.1")
 }
 
 tasks.withType<KotlinCompile> {
