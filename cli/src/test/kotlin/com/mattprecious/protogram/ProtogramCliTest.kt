@@ -5,6 +5,7 @@ import com.github.ajalt.clikt.core.UsageError
 import com.google.common.jimfs.Configuration
 import com.google.common.jimfs.Jimfs
 import java.io.PrintStream
+import java.nio.file.Files
 import okio.Buffer
 import okio.ByteString.Companion.decodeHex
 import org.junit.Assert.assertEquals
@@ -38,7 +39,7 @@ class ProtogramCliTest {
     assertEquals(expected, stdout.readUtf8())
   }
 
-  @Test fun hexWithProto() {
+  @Test fun hexWithProtos() {
     fsRoot.resolve("test.proto").writeText("""
       message Foo {
         required int32 id = 1;
@@ -50,7 +51,46 @@ class ProtogramCliTest {
       }
     """)
 
-    command.parse(listOf("--source", fsRoot.toString(), "--type", "Foo", "0804120610e80718c806"))
+    command.parse(listOf(
+        "--source", fsRoot.toString(),
+        "--type", "Foo",
+        "0804120610e80718c806"))
+
+    val expected = """
+      |┌─  id: 4
+      |╰- bar ┐
+      |       ├─  id: 1000
+      |       ╰- age: 840
+      |""".trimMargin()
+    assertEquals(expected, stdout.readUtf8())
+  }
+
+  @Test fun hexWithProtosTwoSources() {
+    val fooDir = fsRoot.resolve("foo")
+    Files.createDirectory(fooDir)
+    fooDir.resolve("foo.proto").writeText("""
+      import bar.proto;
+
+      message Foo {
+        required int32 id = 1;
+        required Bar bar = 2;
+      }
+    """)
+
+    val barDir = fsRoot.resolve("bar")
+    Files.createDirectory(barDir)
+    barDir.resolve("bar.proto").writeText("""
+      message Bar {
+        required int32 id = 2;
+        optional int32 age = 3;
+      }
+    """)
+
+    command.parse(listOf(
+        "--source", fooDir.toString(),
+        "--source", barDir.toString(),
+        "--type", "Foo",
+        "0804120610e80718c806"))
 
     val expected = """
       |┌─  id: 4
