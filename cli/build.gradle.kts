@@ -37,7 +37,7 @@ val binaryJar = task("binaryJar") {
     val fatJarFile = fatJar.archiveFile.get().asFile
 
     binaryFile.parentFile.mkdirs()
-    binaryFile.appendText("#!/bin/sh\n\nexec java -jar \$0 \"\$@\"\n\n")
+    binaryFile.writeText("#!/bin/sh\n\nexec java -jar \$0 \"\$@\"\n\n")
     binaryFile.appendBytes(fatJarFile.readBytes())
 
     binaryFile.setExecutable(true)
