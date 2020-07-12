@@ -26,28 +26,20 @@ jobs:
     - name: Set SHA
       id: shasum
       run: |
-        echo ::set-output name=sha::"$(shasum -a 256 ./cli/build/bin/protogram | awk '{printf $1}')"
+        echo ::set-output name=sha::"$(shasum -a 256 cli/build/bin/protogram | awk '{printf $1}')"
+        
+    - name: Extract release notes
+      id: release_notes
+      uses: ffurrer2/extract-release-notes@v1
 
     - name: Create Release
-      id: create_release
-      uses: actions/create-release@v1
+      uses: softprops/action-gh-release@v1
+      with:
+        body: ${{ steps.release_notes.outputs.release_notes }}
+        prerelease: false
+        files: cli/build/bin/protogram
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      with:
-        tag_name: ${{ github.ref }}
-        release_name: ${{ github.ref }}
-        draft: false
-        prerelease: true
-
-    - name: Upload Release Asset
-      uses: actions/upload-release-asset@v1
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      with:
-        upload_url: ${{ steps.create_release.outputs.upload_url }}
-        asset_path: ./cli/build/bin/protogram
-        asset_name: protogram
-        asset_content_type: application/octet-stream
 
     - name: Bump Brew
       env: 
