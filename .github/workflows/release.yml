@@ -1,4 +1,4 @@
-name: Publish to brew
+name: Publish release
 
 on:
   push:
@@ -36,7 +36,6 @@ jobs:
       uses: softprops/action-gh-release@v1
       with:
         body: ${{ steps.release_notes.outputs.release_notes }}
-        prerelease: false
         files: cli/build/bin/protogram
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -45,6 +44,10 @@ jobs:
       env: 
         HOMEBREW_GITHUB_API_TOKEN: ${{ secrets.BREW_TOKEN }}
       run: |
+        # Can this be done automatically?
+        git config --global user.email "protogram@runner"
+        git config --global user.name "protogram"
+        
         brew tap mattprecious/repo
         brew bump-formula-pr -f --version=${{ steps.get_version.outputs.version }} --no-browse --no-audit \
         --sha256=${{ steps.shasum.outputs.sha }} \
