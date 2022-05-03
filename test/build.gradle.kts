@@ -6,7 +6,7 @@ plugins {
 kotlin {
   jvm()
   js {
-    browser
+    browser()
   }
 
   sourceSets {

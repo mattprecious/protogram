@@ -5,8 +5,8 @@ plugins {
 }
 
 kotlin {
-  target {
-    browser
+  js {
+    browser()
   }
 
   sourceSets["main"].dependencies {

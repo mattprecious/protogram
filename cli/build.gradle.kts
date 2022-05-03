@@ -19,6 +19,7 @@ tasks.withType<KotlinCompile> {
 }
 
 val fatJar = task("fatJar", type = Jar::class) {
+  setDuplicatesStrategy(DuplicatesStrategy.INCLUDE)
   from(configurations.runtimeClasspath.get().map { if (it.isDirectory) it else zipTree(it) })
   with(tasks.jar.get() as CopySpec)
 
