@@ -6,7 +6,7 @@ fun Tree.render(): String {
 }
 
 private fun StringBuilder.appendNodes(nodes: List<Node>, indent: String = "") {
-  val tagWidth = nodes.map { it.label.length }.max()!!
+  val tagWidth = nodes.maxOf { it.label.length }
 
   nodes.forEachIndexed { index, node ->
     val indented = indent != ""

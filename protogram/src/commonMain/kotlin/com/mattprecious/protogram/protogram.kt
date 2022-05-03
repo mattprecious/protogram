@@ -1,4 +1,5 @@
 @file:JvmName("Protogram")
+
 package com.mattprecious.protogram
 
 import com.mattprecious.tinsel.Node.Branch
@@ -129,7 +130,7 @@ private fun ByteString.isProbablyUtf8(): Boolean {
 private fun Int.isLikelyBinary(): Boolean {
   return when (this) {
     0xFFFD -> true // Replacement code point.
-    ' '.toInt(), '\t'.toInt(), '\r'.toInt(), '\n'.toInt() -> false
+    ' '.code, '\t'.code, '\r'.code, '\n'.code -> false
     else -> (this in 0x00..0x1F) or (this in 0x7F..0x9F)
   }
 }

@@ -1,9 +1,9 @@
 package com.mattprecious.protogram.web
 
 import com.mattprecious.protogram.printProto
-import kotlin.browser.document
-import kotlin.browser.window
 import kotlin.js.Promise
+import kotlinx.browser.document
+import kotlinx.browser.window
 import kotlinx.coroutines.await
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.coroutineScope
