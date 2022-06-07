@@ -14,8 +14,8 @@ kotlin {
       dependencies {
         api(kotlin("stdlib-common"))
         implementation(project(":tinsel"))
-        api("com.squareup.okio:okio-multiplatform:2.4.2")
-        api("com.squareup.wire:wire-schema-multiplatform:3.1.0")
+        api("com.squareup.okio:okio:3.1.0")
+        api("com.squareup.wire:wire-schema:4.4.0")
       }
     }
     commonTest {

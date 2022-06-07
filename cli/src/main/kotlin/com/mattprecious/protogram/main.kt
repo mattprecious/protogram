@@ -14,6 +14,7 @@ import com.github.ajalt.clikt.parameters.options.multiple
 import com.github.ajalt.clikt.parameters.options.option
 import com.github.ajalt.clikt.parameters.options.required
 import com.github.ajalt.clikt.parameters.types.path
+import com.squareup.wire.schema.Location
 import com.squareup.wire.schema.ProtoType
 import com.squareup.wire.schema.Schema
 import com.squareup.wire.schema.SchemaLoader
@@ -63,11 +64,9 @@ internal class ProtogramCli(
       if (protoOptions.dirs.isEmpty()) {
         throw UsageError("At least one --source is required with --type")
       }
-      val schemaLoader = SchemaLoader()
-      protoOptions.dirs.forEach {
-        schemaLoader.addSource(it)
-      }
-      schema = schemaLoader.load()
+      val schemaLoader = SchemaLoader(okio.FileSystem.SYSTEM)
+      schemaLoader.initRoots(protoOptions.dirs.map { Location.Companion.get(it.toString()) })
+      schema = schemaLoader.loadSchema()
       type = schema!!.getType(protoOptions.type)?.type
     }
 

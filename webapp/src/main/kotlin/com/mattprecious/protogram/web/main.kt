@@ -8,7 +8,6 @@ import kotlinx.coroutines.await
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.flow.callbackFlow
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import okio.Buffer
@@ -25,7 +24,7 @@ import org.w3c.files.Blob
 import org.w3c.files.File
 import org.w3c.files.FileList
 
-suspend fun main() = coroutineScope<Unit> {
+suspend fun main() = coroutineScope {
   val input = document.getElementById("input") as HTMLTextAreaElement
   val file = document.getElementById("file") as HTMLInputElement
   val output = document.getElementById("output") as HTMLTextAreaElement
@@ -82,7 +81,7 @@ suspend fun main() = coroutineScope<Unit> {
 
 private fun EventTarget.events(event: String) = callbackFlow {
   val listener: (Event) -> Unit = {
-    offer(it)
+    require(trySend(it).isSuccess)
   }
   addEventListener(event, listener)
   awaitClose {
