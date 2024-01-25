@@ -39,6 +39,7 @@ suspend fun main() = coroutineScope<Unit> {
   fun renderHex(value: String) {
     val tree = try {
       val trimmedValue = value.trim()
+          .replace(" ", "")
           .replace("\n", "")
       printProto(trimmedValue.decodeHex())
     } catch (e: Exception) {
