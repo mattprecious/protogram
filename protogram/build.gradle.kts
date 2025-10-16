@@ -1,9 +1,15 @@
 plugins {
   kotlin("multiplatform")
-  id("org.jlleitschuh.gradle.ktlint")
+  id("org.jlleitschuh.gradle.ktlint") apply false
+}
+
+repositories {
+  mavenCentral()
 }
 
 kotlin {
+  jvmToolchain(17)
+  
   jvm()
   js {
     browser()
@@ -14,8 +20,8 @@ kotlin {
       dependencies {
         api(kotlin("stdlib-common"))
         implementation(project(":tinsel"))
-        api("com.squareup.okio:okio-multiplatform:2.4.2")
-        api("com.squareup.wire:wire-schema-multiplatform:3.1.0")
+        api("com.squareup.okio:okio:3.7.0")
+        api("com.squareup.wire:wire-schema:4.9.7")
       }
     }
     commonTest {

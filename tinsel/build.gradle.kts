@@ -1,9 +1,11 @@
 plugins {
   kotlin("multiplatform")
-  id("org.jlleitschuh.gradle.ktlint")
+  id("org.jlleitschuh.gradle.ktlint") apply false
 }
 
 kotlin {
+  jvmToolchain(17)
+  
   jvm()
   js {
     browser()

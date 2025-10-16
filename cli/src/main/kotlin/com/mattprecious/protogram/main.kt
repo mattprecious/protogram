@@ -7,6 +7,7 @@ import com.github.ajalt.clikt.core.PrintHelpMessage
 import com.github.ajalt.clikt.core.UsageError
 import com.github.ajalt.clikt.parameters.arguments.argument
 import com.github.ajalt.clikt.parameters.arguments.convert
+import com.squareup.wire.schema.Location
 import com.github.ajalt.clikt.parameters.arguments.optional
 import com.github.ajalt.clikt.parameters.groups.OptionGroup
 import com.github.ajalt.clikt.parameters.groups.cooccurring
@@ -22,6 +23,7 @@ import java.io.PrintStream
 import java.nio.file.FileSystem
 import java.nio.file.FileSystems
 import okio.ByteString.Companion.decodeHex
+import okio.FileSystem.Companion.asOkioFileSystem
 import okio.buffer
 import okio.source
 
@@ -30,7 +32,7 @@ fun main(vararg args: String) {
 }
 
 internal class ProtogramCli(
-  fs: FileSystem,
+  private val fs: FileSystem,
   private val stdin: InputStream,
   private val stdout: PrintStream,
   private val stderr: PrintStream
@@ -63,12 +65,10 @@ internal class ProtogramCli(
       if (protoOptions.dirs.isEmpty()) {
         throw UsageError("At least one --source is required with --type")
       }
-      val schemaLoader = SchemaLoader()
-      protoOptions.dirs.forEach {
-        schemaLoader.addSource(it)
-      }
-      schema = schemaLoader.load()
-      type = schema!!.getType(protoOptions.type)?.type
+      val schemaLoader = SchemaLoader(fs.asOkioFileSystem())
+      schemaLoader.initRoots(protoOptions.dirs.map { Location.get(it.toString()) })
+      schema = schemaLoader.loadSchema()
+      type = schema.getType(protoOptions.type)?.type
     }
 
     stdout.print(printProto(decodeBytes, schema, type))
