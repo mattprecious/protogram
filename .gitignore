@@ -2,6 +2,9 @@
 .idea
 *.iml
 
+.kotlin
+kotlin-js-store
+
 # Gradle
 .gradle
 gradlew.bat
