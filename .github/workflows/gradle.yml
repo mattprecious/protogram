@@ -20,25 +20,25 @@ jobs:
       run: ./gradlew --no-daemon build
     - name: Archive protogram test results
       if: always()
-      uses: actions/upload-artifact@v1
+      uses: actions/upload-artifact@v4
       with:
         name: protogram-report
         path: protogram/build/reports/tests/allTests
     - name: Archive tinsel test results
       if: always()
-      uses: actions/upload-artifact@v1
+      uses: actions/upload-artifact@v4
       with:
         name: tinsel-report
         path: tinsel/build/reports/tests/allTests
     - name: Archive test test results
       if: always()
-      uses: actions/upload-artifact@v1
+      uses: actions/upload-artifact@v4
       with:
         name: test-report
         path: test/build/reports/tests/allTests
     - name: Archive cli test results
       if: always()
-      uses: actions/upload-artifact@v1
+      uses: actions/upload-artifact@v4
       with:
         name: cli-report
         path: cli/build/reports/tests/test
