@@ -12,6 +12,7 @@ import com.squareup.wire.FieldEncoding.LENGTH_DELIMITED
 import com.squareup.wire.FieldEncoding.VARINT
 import com.squareup.wire.ProtoReader
 import com.squareup.wire.schema.EnumType
+import com.squareup.wire.schema.EnclosingType
 import com.squareup.wire.schema.MessageType
 import com.squareup.wire.schema.ProtoType
 import com.squareup.wire.schema.Schema
@@ -34,6 +35,8 @@ private fun ProtoReader.readTree(schema: Schema?, type: ProtoType?): Tree {
         var fieldName = tag.toString()
         if (schema != null && type != null) {
           when (val schemaType = schema.getType(type)) {
+            null -> {}
+            is EnclosingType -> {}
             is MessageType -> {
               val field = schemaType.field(tag)
               if (field != null) {

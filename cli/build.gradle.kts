@@ -14,10 +14,6 @@ dependencies {
   testImplementation("com.google.jimfs", "jimfs", "1.1")
 }
 
-tasks.withType<KotlinCompile> {
-  kotlinOptions.jvmTarget = "1.8"
-}
-
 val fatJar = task("fatJar", type = Jar::class) {
   setDuplicatesStrategy(DuplicatesStrategy.INCLUDE)
   from(configurations.runtimeClasspath.get().map { if (it.isDirectory) it else zipTree(it) })
