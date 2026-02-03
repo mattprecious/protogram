@@ -1,8 +1,10 @@
-import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
-
 plugins {
   kotlin("jvm")
   id("org.jlleitschuh.gradle.ktlint")
+}
+
+kotlin {
+  jvmToolchain(17)
 }
 
 dependencies {
@@ -14,41 +16,39 @@ dependencies {
   testImplementation("com.google.jimfs", "jimfs", "1.1")
 }
 
-tasks.withType<KotlinCompile> {
-  kotlinOptions.jvmTarget = "1.8"
-}
-
-val fatJar = task("fatJar", type = Jar::class) {
-  setDuplicatesStrategy(DuplicatesStrategy.INCLUDE)
-  from(configurations.runtimeClasspath.get().map { if (it.isDirectory) it else zipTree(it) })
-  with(tasks.jar.get() as CopySpec)
-
-  archiveClassifier.set("fat")
-
-  manifest {
-    attributes["Main-Class"] = "com.mattprecious.protogram.Main"
-  }
-}
-
-val binaryJar = task("binaryJar") {
-  val binaryDir = File(buildDir, "bin")
-  val binaryFile = File(binaryDir, "protogram")
-
-  doLast {
-    val fatJarFile = fatJar.archiveFile.get().asFile
-
-    binaryFile.parentFile.mkdirs()
-    binaryFile.writeText("#!/bin/sh\n\nexec java -jar \$0 \"\$@\"\n\n")
-    binaryFile.appendBytes(fatJarFile.readBytes())
-
-    binaryFile.setExecutable(true)
-  }
-}
-
 tasks {
-  "assemble" {
+  val fatJar = register<Jar>("fatJar", {
+    duplicatesStrategy = DuplicatesStrategy.INCLUDE
+    from(configurations.runtimeClasspath.get().map { if (it.isDirectory) it else zipTree(it) })
+    with(jar.get() as CopySpec)
+
+    archiveClassifier.set("fat")
+
+    manifest {
+      attributes["Main-Class"] = "com.mattprecious.protogram.Main"
+    }
+  })
+
+  val binaryJar = register("binaryJar", {
+    val binaryDir = layout.buildDirectory.dir("bin").get().asFile
+    val binaryFile = binaryDir.resolve("protogram")
+
+    doLast {
+      val fatJarFile = fatJar.get().archiveFile.get().asFile
+
+      binaryFile.parentFile.mkdirs()
+      binaryFile.writeText("#!/bin/sh\n\nexec java -jar \$0 \"\$@\"\n\n")
+      binaryFile.appendBytes(fatJarFile.readBytes())
+
+      binaryFile.setExecutable(true)
+    }
+  })
+
+  named("assemble") {
     dependsOn(binaryJar)
   }
 
-  binaryJar.dependsOn(fatJar)
+  binaryJar {
+    dependsOn(fatJar)
+  }
 }

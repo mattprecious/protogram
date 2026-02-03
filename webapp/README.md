@@ -9,7 +9,7 @@ Currently the website deploys automatically from the `master` branch.
 Development
 -----------
 
-Run `./gradlew :webapp:run --continuous` and a local webserver and browser will be opened.
+Run `./gradlew :webapp:jsBrowserDevelopmentRun --continuous` and a local webserver will be opened.
 Code changes will be automatically picked up and compiled. The browser will also refresh
 automatically.
 
